@@ -216,6 +216,48 @@
   /* ── Toast ── */
   .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green); color: white; padding: 12px 24px; border-radius: 28px; font-size: 14px; font-weight: 500; z-index: 999; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); pointer-events: none; }
   .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── Profile ── */
+  .profile-cover { height: 180px; background: linear-gradient(135deg, var(--coral) 0%, #ff8c42 50%, var(--yellow) 100%); position: relative; }
+  .profile-header { display: flex; align-items: flex-end; gap: 20px; padding: 0 32px; margin-top: -48px; margin-bottom: 24px; flex-wrap: wrap; }
+  .profile-avatar-wrap { position: relative; flex-shrink: 0; }
+  .profile-avatar { width: 96px; height: 96px; border-radius: 50%; border: 4px solid white; background: var(--coral); color: white; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 800; font-family: 'Syne', sans-serif; box-shadow: var(--shadow-md); cursor: default; overflow: hidden; }
+  .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-info { flex: 1; padding-bottom: 4px; min-width: 200px; }
+  .profile-name { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+  .profile-bio { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .profile-stats { display: flex; gap: 24px; margin-top: 10px; }
+  .profile-stat { text-align: center; }
+  .profile-stat-num { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); line-height: 1; }
+  .profile-stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .profile-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 28px; }
+  .profile-tab { padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+  .profile-tab:hover { color: var(--text); }
+  .profile-tab.active { color: var(--coral); border-bottom-color: var(--coral); }
+  .clickable-name { cursor: pointer; transition: color 0.15s; }
+  .clickable-name:hover { color: var(--coral); text-decoration: underline; }
+
+  /* ── Person ── */
+  .person-header { display: flex; gap: 32px; padding: 48px 0 36px; align-items: flex-start; flex-wrap: wrap; }
+  .person-photo { width: 160px; height: 240px; border-radius: var(--radius-lg); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-md); background: #f0f0eb; display: flex; align-items: center; justify-content: center; font-size: 64px; }
+  .person-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-lg); }
+  .person-info { flex: 1; min-width: 240px; }
+  .person-name { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; line-height: 1.1; margin-bottom: 4px; }
+  .person-name-en { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
+  .person-meta-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 16px; }
+  .person-meta-item { font-size: 13px; }
+  .person-meta-label { color: var(--muted); margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .person-meta-val { font-weight: 500; }
+  .person-bio { font-size: 14px; line-height: 1.85; color: #333; max-width: 600px; }
+  .person-bio.collapsed { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .known-for-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; }
+  .dept-label { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 14px; display: flex; align-items: center; gap: 10px; }
+  .dept-label::after { content: ''; flex: 1; height: 1.5px; background: var(--border); }
+  .filmography-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s; }
+  .filmography-item:hover .filmography-title { color: var(--coral); }
+  .filmography-poster { width: 40px; height: 60px; border-radius: 6px; object-fit: cover; background: #f0f0eb; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .filmography-title { font-size: 14px; font-weight: 500; line-height: 1.3; }
+  .filmography-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -309,18 +351,63 @@
   <div class="container">
     <div class="discover-hero">
       <h2>今晚看什么？</h2>
-      <p>告诉我你的心情，我来帮你挑</p>
+      <p>选心情，加筛选，找到今晚的那一部</p>
     </div>
-    <div class="mood-grid">
-      <div class="mood-card selected" onclick="selectMood(this,'comedy')"><span class="mood-emoji">😌</span><div class="mood-label">轻松放松</div><div class="mood-sub">不用动脑</div></div>
-      <div class="mood-card" onclick="selectMood(this,'thriller')"><span class="mood-emoji">🧠</span><div class="mood-label">烧脑刺激</div><div class="mood-sub">越复杂越好</div></div>
-      <div class="mood-card" onclick="selectMood(this,'drama')"><span class="mood-emoji">😭</span><div class="mood-label">感人催泪</div><div class="mood-sub">好好哭一场</div></div>
-      <div class="mood-card" onclick="selectMood(this,'animation')"><span class="mood-emoji">😂</span><div class="mood-label">笑到肚子疼</div><div class="mood-sub">开心就好</div></div>
-      <div class="mood-card" onclick="selectMood(this,'science fiction')"><span class="mood-emoji">🌍</span><div class="mood-label">科幻探索</div><div class="mood-sub">探索新世界</div></div>
+
+    <!-- 心情卡（多选） -->
+    <div style="font-size:13px;font-weight:500;color:var(--muted);margin-bottom:10px;">🎭 选类型 <span style="font-weight:400">（可多选）</span></div>
+    <div class="mood-grid" id="mood-grid">
+      <div class="mood-card selected" data-genre="35"  onclick="toggleMood(this)"><span class="mood-emoji">😌</span><div class="mood-label">轻松放松</div><div class="mood-sub">喜剧</div></div>
+      <div class="mood-card" data-genre="53"  onclick="toggleMood(this)"><span class="mood-emoji">🧠</span><div class="mood-label">烧脑刺激</div><div class="mood-sub">惊悚</div></div>
+      <div class="mood-card" data-genre="18"  onclick="toggleMood(this)"><span class="mood-emoji">😭</span><div class="mood-label">感人催泪</div><div class="mood-sub">剧情</div></div>
+      <div class="mood-card" data-genre="16"  onclick="toggleMood(this)"><span class="mood-emoji">✨</span><div class="mood-label">动画世界</div><div class="mood-sub">动画</div></div>
+      <div class="mood-card" data-genre="878" onclick="toggleMood(this)"><span class="mood-emoji">🌍</span><div class="mood-label">科幻探索</div><div class="mood-sub">科幻</div></div>
+      <div class="mood-card" data-genre="28"  onclick="toggleMood(this)"><span class="mood-emoji">💥</span><div class="mood-label">爽快动作</div><div class="mood-sub">动作</div></div>
+      <div class="mood-card" data-genre="27"  onclick="toggleMood(this)"><span class="mood-emoji">😱</span><div class="mood-label">吓到不敢看</div><div class="mood-sub">恐怖</div></div>
+      <div class="mood-card" data-genre="10749" onclick="toggleMood(this)"><span class="mood-emoji">💕</span><div class="mood-label">甜甜的爱情</div><div class="mood-sub">爱情</div></div>
+      <div class="mood-card" data-genre="99"  onclick="toggleMood(this)"><span class="mood-emoji">🎥</span><div class="mood-label">真实世界</div><div class="mood-sub">纪录片</div></div>
+      <div class="mood-card" data-genre="80"  onclick="toggleMood(this)"><span class="mood-emoji">🕵️</span><div class="mood-label">犯罪悬疑</div><div class="mood-sub">犯罪</div></div>
     </div>
+
+    <!-- 筛选条 -->
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:white;border-radius:var(--radius-md);border:1.5px solid var(--border);padding:14px 20px;margin-bottom:32px;">
+      <span style="font-size:13px;font-weight:500;color:var(--muted);margin-right:4px;">⚙️ 筛选</span>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;color:var(--muted)">排序</span>
+        <select id="filter-sort" onchange="applyDiscover()" style="padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);outline:none;cursor:pointer">
+          <option value="popularity.desc">🔥 最热门</option>
+          <option value="vote_average.desc">⭐ 最高分</option>
+          <option value="release_date.desc">🆕 最新上映</option>
+          <option value="revenue.desc">💰 票房最高</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;color:var(--muted)">评分</span>
+        <select id="filter-rating" onchange="applyDiscover()" style="padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);outline:none;cursor:pointer">
+          <option value="0">全部</option>
+          <option value="6">6分+</option>
+          <option value="7">7分+</option>
+          <option value="8">8分+</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;color:var(--muted)">年代</span>
+        <select id="filter-era" onchange="applyDiscover()" style="padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);outline:none;cursor:pointer">
+          <option value="">全部年代</option>
+          <option value="2020">2020年代</option>
+          <option value="2010">2010年代</option>
+          <option value="2000">2000年代</option>
+          <option value="1990">90年代</option>
+          <option value="classic">经典老片</option>
+        </select>
+      </div>
+      <button onclick="resetDiscover()" style="margin-left:auto;padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:none;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">重置</button>
+    </div>
+
     <div class="section">
       <div class="section-header">
         <div class="section-title" id="discover-section-title">✨ 为你推荐</div>
+        <span id="discover-result-count" style="font-size:13px;color:var(--muted)"></span>
       </div>
       <div class="movies-grid" id="discover-results"></div>
     </div>
@@ -378,6 +465,16 @@
         <div class="empty-state-icon">🎞️</div>
         <div class="empty-state-title">还没有观影记录</div>
         <p style="color:var(--muted);font-size:14px;margin-top:8px;">点击任意电影的「标记已看」开始记录你的观影宇宙</p>
+      </div>
+    </div>
+
+    <!-- 想看列表 -->
+    <div class="section" style="margin-top:8px">
+      <div class="section-header">
+        <div class="section-title">🔖 我的想看 <span id="wishlist-count" class="badge badge-yellow" style="font-size:11px"></span></div>
+      </div>
+      <div id="my-wishlist-list">
+        <div style="color:var(--muted);font-size:14px;padding:12px 0">还没有想看的电影，在电影详情页点「加入想看」来收藏吧</div>
       </div>
     </div>
 
@@ -561,6 +658,63 @@
   </div>
 </div>
 
+<!-- ══ PROFILE ══ -->
+<div class="page grid-bg" id="page-profile">
+  <div class="profile-cover" id="profile-cover"></div>
+  <div class="container">
+    <div class="profile-header" id="profile-header">
+      <div style="color:var(--muted);padding:40px 0">加载中...</div>
+    </div>
+    <div class="profile-tabs" id="profile-tabs"></div>
+    <div id="profile-tab-content"></div>
+  </div>
+</div>
+
+<!-- ══ EDIT PROFILE MODAL ══ -->
+<div id="edit-profile-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+  <div style="background:white;border-radius:24px;padding:36px;width:100%;max-width:440px;margin:16px;position:relative;animation:fadeIn 0.2s ease">
+    <button onclick="closeEditProfile()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">×</button>
+    <h3 style="font-size:22px;font-weight:800;margin-bottom:6px;">编辑资料</h3>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">让其他影迷更了解你</p>
+
+    <!-- Avatar emoji picker -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px;">选一个头像表情</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="avatar-picker">
+        ${['🎬','🍿','🎭','🌙','🚀','🦁','🐉','🌊','🌸','⭐','🎸','🧩'].map(e =>
+          `<div onclick="selectAvatarEmoji('${e}')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all 0.15s" class="avatar-emoji-opt">${e}</div>`
+        ).join('')}
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">昵称</div>
+      <input id="edit-nickname" type="text" maxlength="20" placeholder="你的昵称"
+        style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border 0.15s"
+        onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='var(--border)'">
+    </div>
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">个人简介</div>
+      <textarea id="edit-bio" rows="3" maxlength="100" placeholder="一句话介绍自己，比如「只看不哭的不算看过」"
+        style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;transition:border 0.15s;line-height:1.5"
+        onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <div style="text-align:right;font-size:11px;color:var(--muted);margin-top:3px" id="bio-char-count">0 / 100</div>
+    </div>
+    <div id="edit-profile-error" style="color:var(--coral-dark);font-size:13px;margin-bottom:12px;display:none"></div>
+    <button onclick="saveProfile()" id="btn-save-profile"
+      style="width:100%;padding:13px;background:var(--coral);color:white;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;box-shadow:0 2px 8px rgba(255,77,77,0.3)">保存资料</button>
+  </div>
+</div>
+
+<!-- ══ PERSON DETAIL ══ -->
+<div class="page grid-bg" id="page-person">
+  <div class="container">
+    <div id="person-detail-content">
+      <div style="text-align:center;padding:80px 20px;color:var(--muted)">加载中...</div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 // ═══════════════════════════════════════
@@ -655,6 +809,60 @@ async function loadWatchedCache() {
 function isWatched(id) { return !!watchedCache[id]; }
 function getRating(id) { return watchedCache[id]?.rating || 0; }
 
+// ── Wishlist (想看) ──
+let wishlistCache = {};
+
+const wishlistDB = {
+  async get() {
+    if (!currentUser) return {};
+    const { data } = await sb.from('wishlist_films').select('*').eq('user_id', currentUser.id);
+    const map = {};
+    (data || []).forEach(r => { map[r.tmdb_id] = r; });
+    return map;
+  },
+  async add(movie) {
+    if (!currentUser) { localWishlistDB.add(movie); return; }
+    await sb.from('wishlist_films').upsert({
+      user_id: currentUser.id,
+      tmdb_id: movie.id,
+      title: movie.title,
+      poster_path: movie.poster_path || null,
+      genre_ids: movie.genre_ids || (movie.genres ? movie.genres.map(g=>g.id) : []),
+      added_at: new Date().toISOString()
+    }, { onConflict: 'user_id,tmdb_id' });
+    await loadWishlistCache();
+    refreshMyFilmsWishlist();
+  },
+  async remove(tmdbId) {
+    if (!currentUser) { localWishlistDB.remove(tmdbId); return; }
+    await sb.from('wishlist_films').delete().eq('user_id', currentUser.id).eq('tmdb_id', tmdbId);
+    await loadWishlistCache();
+    refreshMyFilmsWishlist();
+  }
+};
+
+const localWishlistDB = {
+  get: () => JSON.parse(localStorage.getItem('rowone_wishlist') || '{}'),
+  set: (d) => localStorage.setItem('rowone_wishlist', JSON.stringify(d)),
+  add(movie) {
+    const d = this.get();
+    d[movie.id] = { tmdb_id: movie.id, title: movie.title, poster_path: movie.poster_path, added_at: new Date().toISOString() };
+    this.set(d); refreshMyFilmsWishlist();
+  },
+  remove(id) { const d = this.get(); delete d[id]; this.set(d); refreshMyFilmsWishlist(); }
+};
+
+async function loadWishlistCache() {
+  if (currentUser) {
+    wishlistCache = await wishlistDB.get();
+  } else {
+    const local = localWishlistDB.get();
+    wishlistCache = {};
+    Object.values(local).forEach(r => { wishlistCache[r.tmdb_id || r.id] = r; });
+  }
+}
+function isWishlisted(id) { return !!wishlistCache[id]; }
+
 // ═══════════════════════════════════════
 // TMDB API
 // ═══════════════════════════════════════
@@ -680,6 +888,9 @@ const tmdb = {
   searchMovies: (query) => tmdb.get('/search/movie', { query }),
   discoverByGenre: (genreId) => tmdb.get('/discover/movie', { with_genres: genreId, sort_by: 'popularity.desc' }),
   getTopRatedLowVote: () => tmdb.get('/discover/movie', { sort_by: 'vote_average.desc', 'vote_count.lte': 3000, 'vote_count.gte': 200, 'vote_average.gte': 7.5 }),
+  getPersonDetails: (id) => tmdb.get(`/person/${id}`),
+  getPersonCredits: (id) => tmdb.get(`/person/${id}/movie_credits`),
+  searchPerson: (query) => tmdb.get('/search/person', { query }),
 };
 
 // Genre map
@@ -768,27 +979,77 @@ async function loadHome() {
 // ═══════════════════════════════════════
 // DISCOVER
 // ═══════════════════════════════════════
-let currentGenre = 'comedy';
-async function loadDiscover(genre = 'comedy') {
-  currentGenre = genre;
-  const genreId = GENRE_MAP[genre] || 35;
-  document.getElementById('discover-results').innerHTML = skeletons(6);
+// DISCOVER
+// ═══════════════════════════════════════
+let selectedGenres = new Set(['35']); // default: comedy
+
+function toggleMood(el) {
+  const genre = el.dataset.genre;
+  if (selectedGenres.has(genre)) {
+    // Don't allow deselecting the last one
+    if (selectedGenres.size === 1) return;
+    selectedGenres.delete(genre);
+    el.classList.remove('selected');
+  } else {
+    selectedGenres.add(genre);
+    el.classList.add('selected');
+  }
+  applyDiscover();
+}
+
+function resetDiscover() {
+  selectedGenres = new Set(['35']);
+  document.querySelectorAll('.mood-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.genre === '35');
+  });
+  document.getElementById('filter-sort').value = 'popularity.desc';
+  document.getElementById('filter-rating').value = '0';
+  document.getElementById('filter-era').value = '';
+  applyDiscover();
+}
+
+async function applyDiscover() {
+  const sortBy = document.getElementById('filter-sort').value;
+  const minRating = parseFloat(document.getElementById('filter-rating').value) || 0;
+  const era = document.getElementById('filter-era').value;
+  const genreIds = [...selectedGenres].join(',');
+
+  // Build title
+  const genreNames = [...selectedGenres].map(id => GENRE_NAMES[id] || id);
+  const sortLabel = { 'popularity.desc':'热门', 'vote_average.desc':'高分', 'release_date.desc':'最新', 'revenue.desc':'票房' }[sortBy] || '';
+  const titleParts = [genreNames.join(' + ')];
+  if (sortLabel) titleParts.push(sortLabel);
+  if (minRating) titleParts.push(`${minRating}分+`);
+  if (era && era !== 'classic') titleParts.push(`${era}s`);
+  if (era === 'classic') titleParts.push('经典');
+  document.getElementById('discover-section-title').textContent = '✨ ' + titleParts.join(' · ');
+
+  document.getElementById('discover-results').innerHTML = skeletons(8);
+
+  const params = { with_genres: genreIds, sort_by: sortBy };
+  if (minRating > 0) { params['vote_average.gte'] = minRating; params['vote_count.gte'] = 100; }
+  if (era === 'classic') { params['primary_release_date.lte'] = '1989-12-31'; }
+  else if (era) {
+    params['primary_release_date.gte'] = `${era}-01-01`;
+    params['primary_release_date.lte'] = `${parseInt(era)+9}-12-31`;
+  }
+
+  const results = await tmdb.get('/discover/movie', params);
+  const movies = results.results || [];
+  document.getElementById('discover-result-count').textContent = movies.length ? `找到 ${results.total_results?.toLocaleString() || movies.length} 部` : '';
+  document.getElementById('discover-results').innerHTML = movies.slice(0, 12).map(m => movieCard(m)).join('') ||
+    `<div class="empty-state"><div class="empty-state-icon">🎬</div><div class="empty-state-title">没找到符合条件的电影</div><p style="color:var(--muted);font-size:14px;margin-top:8px">试试放宽筛选条件？</p></div>`;
+}
+
+async function loadDiscover() {
   document.getElementById('discover-hidden').innerHTML = skeletons(4);
-  const [results, hidden] = await Promise.all([
-    tmdb.discoverByGenre(genreId),
-    tmdb.getTopRatedLowVote()
-  ]);
-  document.getElementById('discover-results').innerHTML = results.results.slice(0,8).map(m => movieCard(m)).join('');
+  applyDiscover();
+  const hidden = await tmdb.getTopRatedLowVote();
   document.getElementById('discover-hidden').innerHTML = hidden.results.slice(0,4).map(m => movieCard(m)).join('');
 }
 
-function selectMood(el, genre) {
-  document.querySelectorAll('.mood-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  const labels = { comedy:'😌 轻松放松推荐', thriller:'🧠 烧脑刺激推荐', drama:'😭 感人催泪推荐', animation:'😂 欢笑动画推荐', 'science fiction':'🌍 科幻探索推荐' };
-  document.getElementById('discover-section-title').textContent = labels[genre] || '✨ 为你推荐';
-  loadDiscover(genre);
-}
+// keep old selectMood as no-op for safety
+function selectMood() {}
 
 // ═══════════════════════════════════════
 // AUTH MODAL
@@ -861,9 +1122,13 @@ function updateNavAuth(user) {
   const el = document.getElementById('navbar-auth');
   if (user) {
     const nickname = user.user_metadata?.nickname || user.email.split('@')[0];
+    const avatarEmoji = user.user_metadata?.avatar_emoji || '';
+    const avatarContent = avatarEmoji
+      ? `<span style="font-size:18px">${avatarEmoji}</span>`
+      : `<span style="font-size:13px;font-weight:700;font-family:'Syne',sans-serif">${nickname.slice(0,1).toUpperCase()}</span>`;
     el.innerHTML = `
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;border-radius:50%;background:var(--coral);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer" title="${nickname}" onclick="showPage('myfilms')">${nickname.slice(0,1).toUpperCase()}</div>
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--coral);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(255,77,77,0.3)" title="${nickname}" onclick="openOwnProfile()">${avatarContent}</div>
         <button class="btn-ghost" onclick="doLogout()">退出</button>
       </div>`;
   } else {
@@ -885,7 +1150,14 @@ function refreshMyFilms() {
   document.getElementById('stat-year-sub').textContent = yearCount > 0 ? '比去年还在涨' : '今年还没开始';
   const rated = films.filter(f => f.rating > 0);
   document.getElementById('stat-avg').textContent = rated.length ? (rated.reduce((s,f) => s + f.rating, 0) / rated.length).toFixed(1) : '—';
-  document.getElementById('stat-reviews').textContent = 0;
+  // Load real review count
+  if (currentUser) {
+    sb.from('reviews').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).then(({ count }) => {
+      document.getElementById('stat-reviews').textContent = count || 0;
+    });
+  } else {
+    document.getElementById('stat-reviews').textContent = 0;
+  }
 
   // Show charts only if has data
   if (films.length > 0) {
@@ -922,7 +1194,37 @@ function refreshMyFilms() {
     </div>`).join('');
 }
 
-// ── Charts ──
+function refreshMyFilmsWishlist() {
+  const films = Object.values(wishlistCache).sort((a,b) => (b.added_at||'').localeCompare(a.added_at||''));
+  const countEl = document.getElementById('wishlist-count');
+  if (countEl) countEl.textContent = films.length ? films.length : '';
+  const listEl = document.getElementById('my-wishlist-list');
+  if (!listEl) return;
+  if (films.length === 0) {
+    listEl.innerHTML = `<div style="color:var(--muted);font-size:14px;padding:12px 0">还没有想看的电影，在电影详情页点「加入想看」来收藏吧 🔖</div>`;
+    return;
+  }
+  listEl.innerHTML = `<div class="movies-grid">${films.map(m => `
+    <div class="movie-card" style="position:relative">
+      <div onclick="openFilm(${m.tmdb_id || m.id})" style="cursor:pointer">
+        <div style="position:relative">
+          ${m.poster_path ? `<img class="movie-poster-img" src="${IMG}${m.poster_path}" alt="${m.title}" loading="lazy">` : '<div class="movie-poster-fallback">🎬</div>'}
+          <div style="position:absolute;top:8px;left:8px;background:var(--yellow);color:var(--yellow-dark);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">想看</div>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">${m.title}</div>
+          <div class="movie-year">加于 ${(m.added_at||'').slice(0,10)||'—'}</div>
+        </div>
+      </div>
+      <button onclick="removeFromWishlist(${m.tmdb_id || m.id})" title="从想看移除"
+        style="position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;color:white;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>`).join('')}</div>`;
+}
+
+async function removeFromWishlist(tmdbId) {
+  await wishlistDB.remove(tmdbId);
+  showToast('已从想看列表移除');
+}
 function renderMonthlyChart(films) {
   const thisYear = new Date().getFullYear();
   document.getElementById('chart-year-label').textContent = thisYear + ' 年';
@@ -1009,6 +1311,7 @@ async function openFilm(id) {
   currentFilm = detail;
   currentRating = getRating(id);
   renderFilmDetail(detail, credits, similar);
+  loadFilmReviews(id);
 }
 
 function renderFilmDetail(m, credits, similar) {
@@ -1035,7 +1338,7 @@ function renderFilmDetail(m, credits, similar) {
       ? `<img class="cast-avatar" src="${IMG}${p.profile_path}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
       : '';
     const fallback = `<div class="cast-avatar-fallback" style="${p.profile_path?'display:none':''}">${p.name.slice(0,1)}</div>`;
-    return `<div class="cast-item">${av}${fallback}<span class="cast-name">${p.name}</span>${p.character?`<span class="cast-char">· ${p.character}</span>`:''}</div>`;
+    return `<div class="cast-item" onclick="openPerson(${p.id})" style="cursor:pointer" title="查看影人主页">${av}${fallback}<span class="cast-name clickable-name">${p.name}</span>${p.character?`<span class="cast-char">· ${p.character}</span>`:''}</div>`;
   }).join('');
 
   const similarHTML = similar.results.slice(0,6).map(m => movieCard(m)).join('');
@@ -1067,16 +1370,24 @@ function renderFilmDetail(m, credits, similar) {
           <div class="film-info-section">
             <h3>主创人员</h3>
             <div class="crew-grid">
-              ${director ? `<div class="crew-item"><div class="crew-role">导演</div><div class="crew-name">${director.name}</div></div>` : ''}
-              ${credits.crew?.filter(c=>c.job==='Screenplay'||c.job==='Writer').slice(0,1).map(c=>`<div class="crew-item"><div class="crew-role">编剧</div><div class="crew-name">${c.name}</div></div>`).join('')}
-              ${credits.crew?.filter(c=>c.job==='Director of Photography').slice(0,1).map(c=>`<div class="crew-item"><div class="crew-role">摄影</div><div class="crew-name">${c.name}</div></div>`).join('')}
-              ${credits.crew?.filter(c=>c.job==='Original Music Composer').slice(0,1).map(c=>`<div class="crew-item"><div class="crew-role">配乐</div><div class="crew-name">${c.name}</div></div>`).join('')}
+              ${director ? `<div class="crew-item" onclick="openPerson(${director.id})" style="cursor:pointer"><div class="crew-role">导演</div><div class="crew-name clickable-name">${director.name}</div></div>` : ''}
+              ${credits.crew?.filter(c=>c.job==='Screenplay'||c.job==='Writer').slice(0,1).map(c=>`<div class="crew-item" onclick="openPerson(${c.id})" style="cursor:pointer"><div class="crew-role">编剧</div><div class="crew-name clickable-name">${c.name}</div></div>`).join('')}
+              ${credits.crew?.filter(c=>c.job==='Director of Photography').slice(0,1).map(c=>`<div class="crew-item" onclick="openPerson(${c.id})" style="cursor:pointer"><div class="crew-role">摄影</div><div class="crew-name clickable-name">${c.name}</div></div>`).join('')}
+              ${credits.crew?.filter(c=>c.job==='Original Music Composer').slice(0,1).map(c=>`<div class="crew-item" onclick="openPerson(${c.id})" style="cursor:pointer"><div class="crew-role">配乐</div><div class="crew-name clickable-name">${c.name}</div></div>`).join('')}
             </div>
           </div>
 
           ${cast.length ? `<div class="film-info-section"><h3>主要演员</h3><div class="cast-grid">${castHTML}</div></div>` : ''}
 
           ${similar.results.length ? `<div class="film-info-section"><h3>相似推荐</h3><div class="similar-grid">${similarHTML}</div></div>` : ''}
+
+          <div class="film-info-section" id="film-reviews-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <h3 style="margin-bottom:0">影迷影评 <span id="film-review-count" style="font-size:14px;color:var(--muted);font-weight:400"></span></h3>
+              <button onclick="openWriteReview(currentFilm)" style="padding:7px 16px;background:var(--coral);color:white;border:none;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;box-shadow:0 2px 8px rgba(255,77,77,0.25)">✍️ 写影评</button>
+            </div>
+            <div id="film-reviews-list"><div style="color:var(--muted);font-size:13px;padding:8px 0">加载中...</div></div>
+          </div>
         </div>
 
         <div>
@@ -1084,7 +1395,10 @@ function renderFilmDetail(m, credits, similar) {
             <button class="action-btn ${watched?'watched':''}" id="btn-watched" onclick="toggleWatched()">
               ${watched ? '✅ 已看过' : '＋ 标记已看'}
             </button>
-            <button class="action-btn" onclick="openWatchlistModal()">🔖 加入片单</button>
+            <button class="action-btn${isWishlisted(m.id)?' wishlisted':''}" id="btn-wishlist" onclick="toggleWishlist()" style="${isWishlisted(m.id)?'background:var(--yellow-light);border-color:var(--yellow);color:var(--yellow-dark);':''}">
+              ${isWishlisted(m.id) ? '🔖 已加想看' : '🔖 加入想看'}
+            </button>
+            <button class="action-btn" onclick="openWatchlistModal()">🗂 加入片单</button>
             <button class="action-btn" onclick="openWriteReview(currentFilm)">✍️ 写影评</button>
             <div style="border-top:1px solid var(--border);margin:14px 0 12px"></div>
             <div style="text-align:center;font-size:13px;font-weight:500;margin-bottom:2px;">你的评分</div>
@@ -1116,6 +1430,39 @@ async function toggleWatched() {
     btn.textContent = '✅ 已看过';
     btn.classList.add('watched');
     showToast('🎬 已加入观影记录！');
+    // Auto-remove from wishlist if it was there
+    if (isWishlisted(currentFilm.id)) {
+      await wishlistDB.remove(currentFilm.id);
+      const wb = document.getElementById('btn-wishlist');
+      if (wb) { wb.textContent = '🔖 加入想看'; wb.style.background=''; wb.style.borderColor=''; wb.style.color=''; }
+    }
+  }
+  btn.disabled = false;
+}
+
+async function toggleWishlist() {
+  if (!currentFilm) return;
+  const btn = document.getElementById('btn-wishlist');
+  btn.disabled = true;
+  if (isWishlisted(currentFilm.id)) {
+    await wishlistDB.remove(currentFilm.id);
+    btn.textContent = '🔖 加入想看';
+    btn.style.background = '';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+    showToast('已从想看列表移除');
+  } else {
+    if (isWatched(currentFilm.id)) {
+      showToast('这部你已经看过啦 ✅');
+      btn.disabled = false;
+      return;
+    }
+    await wishlistDB.add(currentFilm);
+    btn.textContent = '🔖 已加想看';
+    btn.style.background = 'var(--yellow-light)';
+    btn.style.borderColor = 'var(--yellow)';
+    btn.style.color = 'var(--yellow-dark)';
+    showToast('📌 已加入想看列表！');
   }
   btn.disabled = false;
 }
@@ -1195,8 +1542,8 @@ function avatarColors(str) {
   return colors[i];
 }
 
-function renderReviewCard(r) {
-  const nickname = r.user_email ? r.user_email.split('@')[0] : '影迷';
+function renderReviewCard(r, compact = false) {
+  const nickname = r.user_nickname || (r.user_email ? r.user_email.split('@')[0] : '影迷');
   const initial = nickname.slice(0,1).toUpperCase();
   const [bg, fg] = avatarColors(nickname);
   const stars = r.rating ? '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating) : '';
@@ -1209,11 +1556,11 @@ function renderReviewCard(r) {
       <div class="review-header">
         <div class="avatar" style="background:${bg};color:${fg}">${initial}</div>
         <div class="review-meta">
-          <div class="reviewer-name">${nickname}</div>
+          <div class="reviewer-name clickable-name" onclick="openUserProfile('${r.user_id}')">${escapeHtml(nickname)}</div>
           <div class="review-film-line">
-            <span style="cursor:pointer;color:var(--coral)" onclick="openFilm(${r.tmdb_id})">《${r.movie_title}》</span>
-            ${stars ? `· <span class="stars">${stars}</span>` : ''}
-            · <span style="color:var(--muted)">${timeAgo}</span>
+            ${!compact ? `<span style="cursor:pointer;color:var(--coral)" onclick="openFilm(${r.tmdb_id})">《${escapeHtml(r.movie_title)}》</span> · ` : ''}
+            ${stars ? `<span class="stars">${stars}</span> · ` : ''}
+            <span style="color:var(--muted)">${timeAgo}</span>
           </div>
         </div>
         ${isOwner ? `<button onclick="deleteReview('${r.id}')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:0 4px" title="删除">×</button>` : ''}
@@ -1224,9 +1571,36 @@ function renderReviewCard(r) {
           style="color:${liked ? 'var(--coral)' : 'var(--muted)'}">
           ${liked ? '❤️' : '🤍'} <span id="like-count-${r.id}">${r.likes_count || 0}</span> 个喜欢
         </div>
-        <div class="review-action">💬 回复</div>
       </div>
     </div>`;
+}
+
+async function loadFilmReviews(tmdbId) {
+  const listEl = document.getElementById('film-reviews-list');
+  if (!listEl) return;
+  const { data: reviews } = await sb.from('reviews')
+    .select('*')
+    .eq('tmdb_id', tmdbId)
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  const countEl = document.getElementById('film-review-count');
+  if (!reviews || reviews.length === 0) {
+    if (countEl) countEl.textContent = '';
+    listEl.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:12px 0;text-align:center">还没有人写过这部电影的影评，来第一个写吧！</div>`;
+    return;
+  }
+  if (countEl) countEl.textContent = `(${reviews.length})`;
+
+  // Load likes for this set
+  if (currentUser) {
+    const ids = reviews.map(r => r.id);
+    const { data: likes } = await sb.from('review_likes')
+      .select('review_id').eq('user_id', currentUser.id).in('review_id', ids);
+    (likes || []).forEach(l => { likesCache[l.review_id] = true; });
+  }
+
+  listEl.innerHTML = reviews.map(r => renderReviewCard(r, true)).join('');
 }
 
 function escapeHtml(str) {
@@ -1359,6 +1733,7 @@ async function submitReview() {
   const { error } = await sb.from('reviews').insert({
     user_id: currentUser.id,
     user_email: currentUser.email,
+    user_nickname: currentUser.user_metadata?.nickname || currentUser.email.split('@')[0],
     tmdb_id: reviewSelectedMovie.id,
     movie_title: reviewSelectedMovie.title,
     movie_poster: reviewSelectedMovie.poster_path || null,
@@ -1379,6 +1754,11 @@ async function submitReview() {
   // Reload community if on that page
   if (document.getElementById('page-community').classList.contains('active')) {
     loadCommunity();
+  }
+  // Reload film reviews if viewing the same film
+  if (currentFilm && currentFilm.id === reviewSelectedMovie.id &&
+      document.getElementById('page-film').classList.contains('active')) {
+    loadFilmReviews(currentFilm.id);
   }
   btn.textContent = '发布影评'; btn.disabled = false;
 }
@@ -1548,6 +1928,357 @@ async function deleteWatchlist(watchlistId) {
 }
 
 // ═══════════════════════════════════════
+// PERSON DETAIL
+// ═══════════════════════════════════════
+const DEPT_LABELS = {
+  Acting: '出演作品', Directing: '导演作品', Writing: '编剧作品',
+  Production: '制片作品', 'Sound': '配乐作品', Camera: '摄影作品', Editing: '剪辑作品'
+};
+const DEPT_ICONS = {
+  Acting: '🎭', Directing: '🎬', Writing: '✍️',
+  Production: '🎥', Sound: '🎵', Camera: '📷', Editing: '✂️'
+};
+
+async function openPerson(id) {
+  showPage('person');
+  document.getElementById('person-detail-content').innerHTML =
+    `<div style="text-align:center;padding:80px 20px;color:var(--muted);font-size:15px;">🎬 加载中...</div>`;
+
+  const [person, credits] = await Promise.all([
+    tmdb.getPersonDetails(id),
+    tmdb.getPersonCredits(id)
+  ]);
+
+  renderPersonDetail(person, credits);
+}
+
+function renderPersonDetail(p, credits) {
+  const photoHTML = p.profile_path
+    ? `<div class="person-photo"><img src="${IMG}${p.profile_path}" alt="${p.name}" loading="lazy"></div>`
+    : `<div class="person-photo">🎭</div>`;
+
+  // Age / lifespan
+  const birthYear = p.birthday ? p.birthday.slice(0,4) : null;
+  const deathYear = p.deathday ? p.deathday.slice(0,4) : null;
+  const age = birthYear
+    ? deathYear
+      ? `${birthYear}–${deathYear}（享年 ${parseInt(deathYear)-parseInt(birthYear)} 岁）`
+      : `${birthYear} 年生（${new Date().getFullYear()-parseInt(birthYear)} 岁）`
+    : null;
+
+  const deptLabel = { Acting:'演员', Directing:'导演', Writing:'编剧', Production:'制片人' }[p.known_for_department] || p.known_for_department || '影人';
+
+  // Bio: truncate with expand
+  const bioText = p.biography || '';
+  const bioId = 'person-bio-text';
+  const bioHTML = bioText
+    ? `<div id="${bioId}" class="person-bio collapsed">${bioText}</div>
+       <span onclick="toggleBio('${bioId}')" id="bio-toggle" style="color:var(--coral);font-size:13px;cursor:pointer;display:inline-block;margin-top:6px">展开全文 ▾</span>`
+    : `<div style="color:var(--muted);font-size:14px;font-style:italic">暂无简介</div>`;
+
+  // Known for — top 6 by popularity
+  const knownFor = [...(credits.cast||[]), ...(credits.crew||[])]
+    .filter(m => m.poster_path)
+    .sort((a,b) => (b.popularity||0) - (a.popularity||0))
+    .filter((m, i, arr) => arr.findIndex(x => x.id === m.id) === i)
+    .slice(0, 6);
+
+  const knownForHTML = knownFor.map(m => `
+    <div class="movie-card" onclick="openFilm(${m.id})">
+      <img class="movie-poster-img" src="${IMG}${m.poster_path}" loading="lazy">
+      <div class="movie-info">
+        <div class="movie-title">${m.title}</div>
+        <div class="movie-year">${(m.release_date||'').slice(0,4)}</div>
+        <div class="movie-rating" style="color:var(--muted);font-size:11px">${m.character || m.job || ''}</div>
+      </div>
+    </div>`).join('');
+
+  // Filmography grouped by department, sorted by year desc
+  const allCredits = [
+    ...(credits.cast||[]).map(m => ({ ...m, dept: 'Acting', role: m.character })),
+    ...(credits.crew||[]).map(m => ({ ...m, dept: m.department, role: m.job }))
+  ].filter(m => m.title);
+
+  // Deduplicate by id+dept
+  const seen = new Set();
+  const deduped = allCredits.filter(m => {
+    const key = `${m.id}-${m.dept}`;
+    if (seen.has(key)) return false;
+    seen.add(key); return true;
+  });
+
+  // Group by dept, sort each group by year desc
+  const byDept = {};
+  deduped.forEach(m => {
+    const d = m.dept || 'Other';
+    (byDept[d] = byDept[d] || []).push(m);
+  });
+  Object.values(byDept).forEach(arr => arr.sort((a,b) => (b.release_date||'').localeCompare(a.release_date||'')));
+
+  // Lead with known_for_department first
+  const deptOrder = [p.known_for_department, ...Object.keys(byDept).filter(d => d !== p.known_for_department)];
+
+  const filmographyHTML = deptOrder.filter(d => byDept[d]).map(dept => {
+    const icon = DEPT_ICONS[dept] || '🎬';
+    const label = DEPT_LABELS[dept] || dept;
+    const items = byDept[dept].slice(0, 30).map(m => {
+      const year = (m.release_date||'').slice(0,4);
+      const poster = m.poster_path
+        ? `<img src="${IMG}${m.poster_path}" style="width:40px;height:60px;border-radius:6px;object-fit:cover" loading="lazy">`
+        : `<div class="filmography-poster">🎬</div>`;
+      const watched = isWatched(m.id);
+      return `
+        <div class="filmography-item" onclick="openFilm(${m.id})">
+          ${poster}
+          <div style="flex:1;min-width:0">
+            <div class="filmography-title">${m.title}${watched ? ' <span style="color:var(--green);font-size:11px">✓ 看过</span>' : ''}</div>
+            <div class="filmography-sub">${year}${m.role ? ' · ' + m.role : ''}</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);flex-shrink:0">${year}</div>
+        </div>`;
+    }).join('');
+    return `<div class="dept-label">${icon} ${label}</div><div>${items}</div>`;
+  }).join('');
+
+  document.getElementById('person-detail-content').innerHTML = `
+    <div class="person-header">
+      ${photoHTML}
+      <div class="person-info">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+          <span class="badge badge-gray">${deptLabel}</span>
+          ${p.known_for_department === 'Acting' ? '<span class="badge badge-red">演员</span>' : ''}
+        </div>
+        <div class="person-name">${p.name}</div>
+        ${p.also_known_as?.length ? `<div class="person-name-en">${p.also_known_as.slice(0,2).join(' / ')}</div>` : ''}
+        <div class="person-meta-row">
+          ${age ? `<div class="person-meta-item"><div class="person-meta-label">出生</div><div class="person-meta-val">${age}</div></div>` : ''}
+          ${p.place_of_birth ? `<div class="person-meta-item"><div class="person-meta-label">出生地</div><div class="person-meta-val">${p.place_of_birth}</div></div>` : ''}
+          ${deduped.length ? `<div class="person-meta-item"><div class="person-meta-label">参与作品</div><div class="person-meta-val">${deduped.length} 部</div></div>` : ''}
+        </div>
+        ${bioHTML}
+      </div>
+    </div>
+
+    ${knownFor.length ? `
+    <div class="film-info-section">
+      <h3>代表作品</h3>
+      <div class="known-for-grid">${knownForHTML}</div>
+    </div>` : ''}
+
+    <div class="film-info-section" style="padding-bottom:60px">
+      <h3>完整作品年表</h3>
+      ${filmographyHTML}
+    </div>`;
+}
+
+function toggleBio(id) {
+  const el = document.getElementById(id);
+  const toggle = document.getElementById('bio-toggle');
+  const collapsed = el.classList.toggle('collapsed');
+  toggle.textContent = collapsed ? '展开全文 ▾' : '收起 ▴';
+}
+
+// ═══════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════
+let currentProfileUserId = null;
+
+function openOwnProfile() {
+  if (!currentUser) { openAuthModal('login'); return; }
+  openUserProfile(currentUser.id);
+}
+
+async function openUserProfile(userId) {
+  currentProfileUserId = userId;
+  showPage('profile');
+  document.getElementById('profile-header').innerHTML = '<div style="color:var(--muted);padding:40px 0">加载中...</div>';
+  document.getElementById('profile-tabs').innerHTML = '';
+  document.getElementById('profile-tab-content').innerHTML = '';
+
+  // Fetch user data from watched_films (public proxy for profile info)
+  // We store profile metadata in auth.users user_metadata for own user,
+  // but for other users we derive from their public reviews/watched data.
+  const isOwn = currentUser && currentUser.id === userId;
+
+  let nickname, bio, avatarEmoji;
+  if (isOwn) {
+    nickname = currentUser.user_metadata?.nickname || currentUser.email.split('@')[0];
+    bio = currentUser.user_metadata?.bio || '';
+    avatarEmoji = currentUser.user_metadata?.avatar_emoji || '';
+  } else {
+    // Pull from their latest review as proxy
+    const { data: rev } = await sb.from('reviews').select('user_nickname').eq('user_id', userId).limit(1).single();
+    nickname = rev?.user_nickname || '影迷';
+    bio = '';
+    avatarEmoji = '';
+  }
+
+  // Stats
+  const [{ count: watchedCount }, { count: reviewCount }, { count: wishlistCount }] = await Promise.all([
+    sb.from('watched_films').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+    sb.from('reviews').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+    isOwn ? sb.from('wishlist_films').select('*', { count: 'exact', head: true }).eq('user_id', userId) : Promise.resolve({ count: null })
+  ]);
+
+  // Cover gradient (deterministic from userId)
+  const hue = (userId.charCodeAt(0) * 37 + userId.charCodeAt(1) * 13) % 360;
+  document.getElementById('profile-cover').style.background =
+    `linear-gradient(135deg, hsl(${hue},70%,55%) 0%, hsl(${(hue+40)%360},80%,60%) 100%)`;
+
+  const [bg, fg] = avatarColors(nickname);
+  const avatarInner = avatarEmoji
+    ? `<span style="font-size:44px">${avatarEmoji}</span>`
+    : `<span>${nickname.slice(0,1).toUpperCase()}</span>`;
+
+  document.getElementById('profile-header').innerHTML = `
+    <div class="profile-avatar-wrap">
+      <div class="profile-avatar" style="background:${avatarEmoji ? '#fff8f0' : bg};color:${fg}">${avatarInner}</div>
+    </div>
+    <div class="profile-info">
+      <div class="profile-name">${escapeHtml(nickname)}</div>
+      ${bio ? `<div class="profile-bio">${escapeHtml(bio)}</div>` : (isOwn ? `<div class="profile-bio" style="font-style:italic">还没有简介，<span style="color:var(--coral);cursor:pointer" onclick="openEditProfile()">点击添加</span></div>` : '')}
+      <div class="profile-stats">
+        <div class="profile-stat"><div class="profile-stat-num">${watchedCount || 0}</div><div class="profile-stat-label">已看</div></div>
+        <div class="profile-stat"><div class="profile-stat-num">${reviewCount || 0}</div><div class="profile-stat-label">影评</div></div>
+        ${isOwn ? `<div class="profile-stat"><div class="profile-stat-num">${wishlistCount || 0}</div><div class="profile-stat-label">想看</div></div>` : ''}
+      </div>
+    </div>
+    <div style="padding-bottom:4px;display:flex;gap:8px;flex-wrap:wrap">
+      ${isOwn ? `<button onclick="openEditProfile()" style="padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='var(--border)';this.style.color=''">✏️ 编辑资料</button>` : ''}
+      ${isOwn ? `<button onclick="showPage('myfilms')" style="padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='var(--border)';this.style.color=''">🎞️ 观影记录</button>` : ''}
+    </div>`;
+
+  // Tabs
+  const tabs = isOwn
+    ? [['watched','最近看过'],['reviews','影评'],['wishlist','想看']]
+    : [['watched','最近看过'],['reviews','影评']];
+  document.getElementById('profile-tabs').innerHTML = tabs.map(([id, label], i) =>
+    `<div class="profile-tab${i===0?' active':''}" data-tab="${id}" onclick="switchProfileTab('${id}',${userId==='${userId}'?`'${userId}'`:JSON.stringify(userId)})">${label}</div>`
+  ).join('');
+
+  loadProfileTab('watched', userId, isOwn);
+}
+
+async function switchProfileTab(tab, userId) {
+  document.querySelectorAll('.profile-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  const isOwn = currentUser && currentUser.id === userId;
+  loadProfileTab(tab, userId, isOwn);
+}
+
+async function loadProfileTab(tab, userId, isOwn) {
+  const el = document.getElementById('profile-tab-content');
+  el.innerHTML = '<div style="color:var(--muted);padding:24px 0;text-align:center">加载中...</div>';
+
+  if (tab === 'watched') {
+    const { data } = await sb.from('watched_films').select('*').eq('user_id', userId).order('watched_at', { ascending: false }).limit(18);
+    if (!data || data.length === 0) {
+      el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎞️</div><div class="empty-state-title">还没有观影记录</div></div>`;
+      return;
+    }
+    el.innerHTML = `<div class="movies-grid" style="margin-bottom:40px">${data.map(m => `
+      <div class="movie-card" onclick="openFilm(${m.tmdb_id})">
+        <div style="position:relative">
+          ${m.poster_path ? `<img class="movie-poster-img" src="${IMG}${m.poster_path}" alt="${m.title}" loading="lazy">` : '<div class="movie-poster-fallback">🎬</div>'}
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">${escapeHtml(m.title)}</div>
+          <div class="movie-year">${m.watched_at||'—'}</div>
+          <div class="movie-rating">${m.rating ? '★'.repeat(m.rating)+'☆'.repeat(5-m.rating) : '未评分'}</div>
+        </div>
+      </div>`).join('')}</div>`;
+
+  } else if (tab === 'reviews') {
+    const { data } = await sb.from('reviews').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(20);
+    if (!data || data.length === 0) {
+      el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">✍️</div><div class="empty-state-title">还没有写过影评</div></div>`;
+      return;
+    }
+    el.innerHTML = `<div style="max-width:680px;margin-bottom:40px">${data.map(r => renderReviewCard(r, false)).join('')}</div>`;
+
+  } else if (tab === 'wishlist' && isOwn) {
+    const films = Object.values(wishlistCache).sort((a,b) => (b.added_at||'').localeCompare(a.added_at||''));
+    if (films.length === 0) {
+      el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔖</div><div class="empty-state-title">还没有想看的电影</div></div>`;
+      return;
+    }
+    el.innerHTML = `<div class="movies-grid" style="margin-bottom:40px">${films.map(m => `
+      <div class="movie-card" onclick="openFilm(${m.tmdb_id||m.id})">
+        <div style="position:relative">
+          ${m.poster_path ? `<img class="movie-poster-img" src="${IMG}${m.poster_path}" loading="lazy">` : '<div class="movie-poster-fallback">🎬</div>'}
+          <div style="position:absolute;top:8px;left:8px;background:var(--yellow);color:var(--yellow-dark);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">想看</div>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">${escapeHtml(m.title)}</div>
+          <div class="movie-year">${(m.added_at||'').slice(0,10)||'—'}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+}
+
+// ── Edit Profile Modal ──
+let selectedAvatarEmoji = '';
+
+function openEditProfile() {
+  if (!currentUser) return;
+  selectedAvatarEmoji = currentUser.user_metadata?.avatar_emoji || '';
+  document.getElementById('edit-nickname').value = currentUser.user_metadata?.nickname || currentUser.email.split('@')[0];
+  const bio = currentUser.user_metadata?.bio || '';
+  document.getElementById('edit-bio').value = bio;
+  document.getElementById('bio-char-count').textContent = `${bio.length} / 100`;
+  document.getElementById('edit-profile-error').style.display = 'none';
+  // Highlight current avatar
+  document.querySelectorAll('.avatar-emoji-opt').forEach(el => {
+    const isSelected = el.textContent === selectedAvatarEmoji;
+    el.style.borderColor = isSelected ? 'var(--coral)' : 'var(--border)';
+    el.style.background = isSelected ? 'var(--coral-light)' : '';
+  });
+  document.getElementById('edit-profile-overlay').style.display = 'flex';
+}
+
+function closeEditProfile() {
+  document.getElementById('edit-profile-overlay').style.display = 'none';
+}
+
+document.getElementById('edit-profile-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('edit-profile-overlay')) closeEditProfile();
+});
+
+function selectAvatarEmoji(emoji) {
+  selectedAvatarEmoji = emoji;
+  document.querySelectorAll('.avatar-emoji-opt').forEach(el => {
+    const isSelected = el.textContent === emoji;
+    el.style.borderColor = isSelected ? 'var(--coral)' : 'var(--border)';
+    el.style.background = isSelected ? 'var(--coral-light)' : '';
+  });
+}
+
+document.getElementById('edit-bio').addEventListener('input', function() {
+  document.getElementById('bio-char-count').textContent = `${this.value.length} / 100`;
+});
+
+async function saveProfile() {
+  const nickname = document.getElementById('edit-nickname').value.trim();
+  const bio = document.getElementById('edit-bio').value.trim();
+  const errEl = document.getElementById('edit-profile-error');
+  const btn = document.getElementById('btn-save-profile');
+  if (!nickname) { errEl.textContent = '昵称不能为空'; errEl.style.display = 'block'; return; }
+  btn.textContent = '保存中...'; btn.disabled = true;
+  const { error } = await sb.auth.updateUser({ data: { nickname, bio, avatar_emoji: selectedAvatarEmoji } });
+  if (error) { errEl.textContent = '保存失败：' + error.message; errEl.style.display = 'block'; btn.textContent = '保存资料'; btn.disabled = false; return; }
+  // Refresh local user object
+  const { data: { user } } = await sb.auth.getUser();
+  currentUser = user;
+  updateNavAuth(currentUser);
+  closeEditProfile();
+  showToast('✅ 资料已更新！');
+  // Re-render profile page if still on it
+  if (document.getElementById('page-profile').classList.contains('active')) {
+    openUserProfile(currentUser.id);
+  }
+  btn.textContent = '保存资料'; btn.disabled = false;
+}
+
+// ═══════════════════════════════════════
 // SEARCH
 // ═══════════════════════════════════════
 let searchTimer;
@@ -1587,21 +2318,34 @@ sb.auth.onAuthStateChange(async (event, session) => {
   currentUser = session?.user || null;
   updateNavAuth(currentUser);
   await loadWatchedCache();
+  await loadWishlistCache();
   refreshMyFilms();
+  refreshMyFilmsWishlist();
   loadMyWatchlists();
   if (currentFilm && document.getElementById('page-film').classList.contains('active')) {
     const w = isWatched(currentFilm.id);
     const btn = document.getElementById('btn-watched');
     if (btn) { btn.textContent = w ? '✅ 已看过' : '＋ 标记已看'; btn.classList.toggle('watched', w); }
+    const wl = isWishlisted(currentFilm.id);
+    const wlBtn = document.getElementById('btn-wishlist');
+    if (wlBtn) {
+      wlBtn.textContent = wl ? '🔖 已加想看' : '🔖 加入想看';
+      wlBtn.style.background = wl ? 'var(--yellow-light)' : '';
+      wlBtn.style.borderColor = wl ? 'var(--yellow)' : '';
+      wlBtn.style.color = wl ? 'var(--yellow-dark)' : '';
+    }
   }
 });
 
 (async () => {
   await loadWatchedCache();
+  await loadWishlistCache();
   loadHome();
-  loadDiscover('comedy');
+  loadDiscover();
   refreshMyFilms();
+  refreshMyFilmsWishlist();
 })();
 </script>
 </body>
 </html>
+
